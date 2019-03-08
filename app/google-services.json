@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1001224631918",
+    "firebase_url": "https://equation-solver-4d287.firebaseio.com",
+    "project_id": "equation-solver-4d287",
+    "storage_bucket": "equation-solver-4d287.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1001224631918:android:e9b2e089ed8746d9",
+        "android_client_info": {
+          "package_name": "com.example.equationsolver"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1001224631918-7npho3rlnpapcfb9ddv9jcc8u3e8dnvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.equationsolver",
+            "certificate_hash": "1067376a12bf5bb59f015ae5126df387a96d6a82"
+          }
+        },
+        {
+          "client_id": "1001224631918-4smfgbijkdgn7cgfcui1gjuhibmkkm7g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0qM6HqLiIm4lRcV3ob5t3ZnjfZYPE62Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1001224631918-4smfgbijkdgn7cgfcui1gjuhibmkkm7g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

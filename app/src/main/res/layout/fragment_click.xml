@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/background"
+    tools:context=".ClickFragment">
+
+    <ImageView
+        android:src="@drawable/camera_icon"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:layout_width="200dp"
+        android:layout_height="0dp" />
+
+    <TextView
+        android:text="Click the image of the equation which you want to solve"
+        android:gravity="center"
+        android:typeface="serif"
+        android:textColor="@color/colorWhite"
+        android:textSize="20sp"
+        android:padding="10dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp" />
+
+</LinearLayout>
