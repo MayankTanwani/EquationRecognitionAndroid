@@ -23,6 +23,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 
 public class MainActivity extends AppCompatActivity {
@@ -73,8 +76,9 @@ public class MainActivity extends AppCompatActivity {
                             reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    Log.d(TAG, "Image Url: " + String.valueOf(uri));
+                                    String imgUrl = String.valueOf(uri);
                                     dialog.dismiss();
+                                    executeTask(imgUrl);
                                 }
                             });
 
@@ -88,5 +92,12 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
         }
+    }
+
+    private void executeTask(String imgUrl) {
+        String testUrl = "https://firebasestorage.googleapis.com/v0/b/letschat-79bc7.appspot.com/o/chat_photos%2Fphoto_19-resized.jpg?alt=media&token=9856e398-85d1-4a98-ab94-a28f2dc44ce6";
+        String url = "{\n\n" + "\"url\":" + "\""+ testUrl + "\"" + "\n\n}";
+        GetEquationTask task = new GetEquationTask(this, url);
+        task.execute("https://boiling-wildwood-98824.herokuapp.com/predict");
     }
 }
