@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -32,10 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     FloatingActionButton fabCamera;
     public static final int RC_CAMERA = 1;
-    ImageView ivRandom;
     FirebaseStorage firebaseStorage;
     ProgressDialog dialog;
-    public static final String TAG = "Main Activity";
+    TextView tvEquation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         fabCamera = findViewById(R.id.fabCamera);
-        ivRandom = findViewById(R.id.ivRandom);
+        tvEquation = findViewById(R.id.tvEquation);
         firebaseStorage = FirebaseStorage.getInstance();
         dialog = new ProgressDialog(this);
         fabCamera.setOnClickListener(new View.OnClickListener() {
@@ -96,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void executeTask(String imgUrl) {
         String testUrl = "https://firebasestorage.googleapis.com/v0/b/letschat-79bc7.appspot.com/o/chat_photos%2Fphoto_19-resized.jpg?alt=media&token=9856e398-85d1-4a98-ab94-a28f2dc44ce6";
-        String url = "{\n\n" + "\"url\":" + "\""+ testUrl + "\"" + "\n\n}";
-        GetEquationTask task = new GetEquationTask(this, url);
+        String url = "{\n\n" + "\"url\":" + "\""+ imgUrl + "\"" + "\n\n}";
+        GetEquationTask task = new GetEquationTask(this, testUrl, tvEquation);
         task.execute("https://boiling-wildwood-98824.herokuapp.com/predict");
     }
 }

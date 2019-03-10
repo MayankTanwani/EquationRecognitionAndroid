@@ -1,8 +1,10 @@
 package com.example.equationsolver;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -19,13 +21,14 @@ import java.net.URL;
 
 public class GetEquationTask extends AsyncTask<String, Void, Equation> {
 
-    Context context;
-    String imgUrl;
-    public static final String TAG = "Equation Task";
+    private Context context;
+    private String imgUrl;
+    private TextView tvToChange;
 
-    public GetEquationTask(Context context, String imgUrl) {
+    public GetEquationTask(Context context, String imgUrl, TextView tvToChange) {
         this.context = context;
         this.imgUrl = imgUrl;
+        this.tvToChange = tvToChange;
     }
 
     @Override
@@ -41,6 +44,7 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
         try {
             // Send a POST request
             connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestProperty("Content-Type", "application/json; UTF-8");
             connection.setDoOutput(true);
             connection.setUseCaches(false);
             connection.setRequestMethod("POST");
@@ -48,7 +52,6 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
             dataOutputStream.writeBytes(imgUrl);
             dataOutputStream.flush();
             dataOutputStream.close();
-            Log.d(TAG, "Request: " + imgUrl);
 
             // Get the server response
             InputStream inputStream = connection.getInputStream();
@@ -79,10 +82,10 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
     protected void onPostExecute(Equation equation) {
         super.onPostExecute(equation);
         if(equation != null) {
-            Toast.makeText(context, "Equation: " + equation.getEquation(), Toast.LENGTH_SHORT).show();
+            tvToChange.setText(equation.getEquation());
         }
         else {
-            Toast.makeText(context, "Equation is null", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
         }
     }
 }
