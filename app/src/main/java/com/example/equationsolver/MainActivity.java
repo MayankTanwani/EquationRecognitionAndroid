@@ -110,7 +110,11 @@ public class MainActivity extends AppCompatActivity {
                 selectedImageFile = new File(selectedImageUri.getPath());
             }
             try {
-                selectedImageFile = new Compressor(this).setMaxHeight(720).setMaxWidth(720).compressToFile(selectedImageFile);
+                selectedImageFile = new Compressor(this)
+                                    .setQuality(75)
+                                    .setMaxHeight(640)
+                                    .setMaxWidth(640)
+                                    .compressToFile(selectedImageFile);
             } catch (IOException e) {
                 e.printStackTrace();
             }
