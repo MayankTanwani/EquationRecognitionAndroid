@@ -1,9 +1,8 @@
 package com.example.equationsolver;
 
-import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,11 +23,20 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
     private Context context;
     private String imgUrl;
     private TextView tvToChange;
+    private ProgressDialog dialog;
 
     public GetEquationTask(Context context, String imgUrl, TextView tvToChange) {
         this.context = context;
         this.imgUrl = imgUrl;
         this.tvToChange = tvToChange;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        dialog = new ProgressDialog(context);
+        dialog.setMessage("Recognising Equation...");
+        dialog.show();
     }
 
     @Override
@@ -87,5 +95,6 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
         else {
             Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
         }
+        dialog.dismiss();
     }
 }

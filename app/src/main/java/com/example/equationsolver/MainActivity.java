@@ -1,53 +1,48 @@
 package com.example.equationsolver;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-
+import de.hdodenhof.circleimageview.CircleImageView;
 import id.zelory.compressor.Compressor;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
     private static final String FILE_PROVIDER_AUTH = "com.example.android.fileprovider";
-    FloatingActionButton fabCamera;
+    FloatingActionButton fabCamera, fabRecapture;
     public static final int RC_CAMERA = 1;
     FirebaseStorage firebaseStorage;
     ProgressDialog dialog;
     TextView tvEquation;
-    String mPhotoImagePath;
+    CircleImageView civEquation;
+    String mPhotoImagePath, imgUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,29 +53,76 @@ public class MainActivity extends AppCompatActivity {
         tvEquation = findViewById(R.id.tvEquation);
         firebaseStorage = FirebaseStorage.getInstance();
         dialog = new ProgressDialog(this);
+        fabRecapture = findViewById(R.id.fabRecapture);
+        civEquation = findViewById(R.id.civEquation);
+
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                if(cameraIntent.resolveActivity(getPackageManager()) != null) {
-                    File photoFile = null;
-                    try{
-                        photoFile = createTempImageFile(MainActivity.this);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    if (photoFile != null){
-                        mPhotoImagePath = photoFile.getAbsolutePath();
-                        Uri photoUri = FileProvider.getUriForFile(MainActivity.this,
-                                FILE_PROVIDER_AUTH,
-                                photoFile);
-                        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
-                        cameraIntent.putExtra("uri-string",photoUri.toString());
-                    }
-                    startActivityForResult(cameraIntent, RC_CAMERA);
+                if(civEquation.getVisibility() != View.VISIBLE) {
+                    tvEquation.setVisibility(View.GONE);
+                    launchCamera();
+                }
+                else {
+                    new AlertDialog.Builder(MainActivity.this)
+                            .setTitle("Confirmation Required")
+                            .setMessage("Are you sure to continue ?")
+                            .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    printTheEquation();
+                                }
+                            })
+                            .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            })
+                            .create().show();
                 }
             }
         });
+
+        fabRecapture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(civEquation.getVisibility() == View.VISIBLE) {
+                    launchCamera();
+                }
+            }
+        });
+    }
+
+    @SuppressLint("RestrictedApi")
+    private void printTheEquation() {
+        civEquation.setVisibility(View.GONE);
+        fabRecapture.setVisibility(View.GONE);
+        fabCamera.setImageResource(R.drawable.camera);
+        tvEquation.setVisibility(View.VISIBLE);
+        tvEquation.setText("");
+        executeTask(imgUrl);
+    }
+
+    private void launchCamera() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if(cameraIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try{
+                photoFile = createTempImageFile(MainActivity.this);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            if (photoFile != null){
+                mPhotoImagePath = photoFile.getAbsolutePath();
+                Uri photoUri = FileProvider.getUriForFile(MainActivity.this,
+                        FILE_PROVIDER_AUTH,
+                        photoFile);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,photoUri);
+                cameraIntent.putExtra("uri-string",photoUri.toString());
+            }
+            startActivityForResult(cameraIntent, RC_CAMERA);
+        }
     }
 
     public File createTempImageFile(Context context) throws IOException {
@@ -95,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if(requestCode == RC_CAMERA && resultCode == RESULT_OK) {
@@ -119,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             Log.v(TAG,"Uri result : " + selectedImageUri);
-            StorageReference storageReference = firebaseStorage.getReference().child("equation.jpg");
+            StorageReference storageReference = firebaseStorage.getReference().child(selectedImageUri.getLastPathSegment());
             storageReference.putFile(Uri.fromFile(selectedImageFile))
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -128,9 +171,10 @@ public class MainActivity extends AppCompatActivity {
                             reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                 @Override
                                 public void onSuccess(Uri uri) {
-                                    String imgUrl = String.valueOf(uri);
+                                    imgUrl = String.valueOf(uri);
                                     dialog.dismiss();
-                                    executeTask(imgUrl);
+                                    civEquation.setVisibility(View.VISIBLE);
+                                    Glide.with(MainActivity.this).load(uri.toString()).into(civEquation);
                                 }
                             });
 
@@ -144,12 +188,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
             selectedImageFile.delete();
+            fabRecapture.setVisibility(View.VISIBLE);
+            fabCamera.setImageResource(R.drawable.ic_check);
             mPhotoImagePath = null;
         }
     }
 
     private void executeTask(String imgUrl) {
-        String testUrl = "https://firebasestorage.googleapis.com/v0/b/letschat-79bc7.appspot.com/o/chat_photos%2Fphoto_19-resized.jpg?alt=media&token=9856e398-85d1-4a98-ab94-a28f2dc44ce6";
+        // String testUrl = "https://firebasestorage.googleapis.com/v0/b/letschat-79bc7.appspot.com/o/chat_photos%2Fphoto_19-resized.jpg?alt=media&token=9856e398-85d1-4a98-ab94-a28f2dc44ce6";
         String url = "{\n\n" + "\"url\":" + "\""+ imgUrl + "\"" + "\n\n}";
         GetEquationTask task = new GetEquationTask(this, url, tvEquation);
         task.execute("https://boiling-wildwood-98824.herokuapp.com/predict");
