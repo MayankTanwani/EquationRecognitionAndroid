@@ -24,6 +24,9 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.romainpiel.shimmer.Shimmer;
+import com.romainpiel.shimmer.ShimmerTextView;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -40,7 +43,8 @@ public class MainActivity extends AppCompatActivity {
     public static final int RC_CAMERA = 1;
     FirebaseStorage firebaseStorage;
     ProgressDialog dialog;
-    TextView tvEquation;
+    ShimmerTextView tvEquation;
+    Shimmer shimmer;
     CircleImageView civEquation;
     String mPhotoImagePath, imgUrl;
 
@@ -52,9 +56,11 @@ public class MainActivity extends AppCompatActivity {
         fabCamera = findViewById(R.id.fabCamera);
         tvEquation = findViewById(R.id.tvEquation);
         firebaseStorage = FirebaseStorage.getInstance();
-        dialog = new ProgressDialog(this);
         fabRecapture = findViewById(R.id.fabRecapture);
         civEquation = findViewById(R.id.civEquation);
+        dialog = new ProgressDialog(this);
+        shimmer = new Shimmer();
+        shimmer.start(tvEquation);
 
         fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override

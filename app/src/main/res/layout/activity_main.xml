@@ -32,9 +32,11 @@
             android:layout_width="384dp"
             android:layout_height="384dp" />
 
-        <TextView
+        <com.romainpiel.shimmer.ShimmerTextView
             android:id="@+id/tvEquation"
-            android:textSize="20sp"
+            android:textSize="28sp"
+            android:typeface="serif"
+            android:textColor="#212121"
             android:layout_gravity="center"
             android:gravity="center"
             android:visibility="gone"
