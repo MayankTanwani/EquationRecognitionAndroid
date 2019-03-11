@@ -3,6 +3,7 @@ package com.example.equationsolver;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,17 +19,21 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class GetEquationTask extends AsyncTask<String, Void, Equation> {
 
     private Context context;
     private String imgUrl;
     private TextView tvToChange;
     private ProgressDialog dialog;
+    private CircleImageView civEquation;
 
-    public GetEquationTask(Context context, String imgUrl, TextView tvToChange) {
+    public GetEquationTask(Context context, String imgUrl, TextView tvToChange, CircleImageView civEquation) {
         this.context = context;
         this.imgUrl = imgUrl;
         this.tvToChange = tvToChange;
+        this.civEquation = civEquation;
     }
 
     @Override
@@ -94,6 +99,7 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
         }
         else {
             Toast.makeText(context, "Please Try Again", Toast.LENGTH_SHORT).show();
+            civEquation.setVisibility(View.GONE);
         }
         dialog.dismiss();
     }
