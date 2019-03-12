@@ -26,15 +26,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_gravity="center"
-            android:padding="10dp"
-            android:layout_margin="10dp">
+            android:layout_gravity="center">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/civEquation"
-                android:layout_margin="10dp"
                 android:layout_gravity="center"
                 app:civ_border_width="2dp"
+                android:layout_margin="10dp"
                 app:civ_border_color="@color/colorAccent"
                 android:layout_width="384dp"
                 android:layout_height="384dp" />

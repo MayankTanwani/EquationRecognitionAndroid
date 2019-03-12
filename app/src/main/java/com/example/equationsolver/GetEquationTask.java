@@ -94,7 +94,7 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
     @Override
     protected void onPostExecute(Equation equation) {
         super.onPostExecute(equation);
-        if(equation != null) {
+        if(equation != null && !equation.getEquation().equals(null)) {
             tvToChange.setText(equation.getEquation());
         }
         else {
