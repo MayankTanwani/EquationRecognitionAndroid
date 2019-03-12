@@ -161,9 +161,9 @@ public class MainActivity extends AppCompatActivity {
             }
             try {
                 selectedImageFile = new Compressor(this)
-                                    .setQuality(75)
                                     .setMaxHeight(640)
-                                    .setMaxWidth(640)
+                                    .setMaxWidth(480)
+                                    .setQuality(50)
                                     .compressToFile(selectedImageFile);
             } catch (IOException e) {
                 e.printStackTrace();
