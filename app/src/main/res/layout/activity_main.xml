@@ -18,57 +18,45 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <FrameLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvListEquations"
+        android:layout_weight="8"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+    </android.support.v7.widget.RecyclerView>
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/civEquation"
-                android:layout_gravity="center"
-                app:civ_border_width="2dp"
-                android:layout_margin="10dp"
-                app:civ_border_color="@color/colorAccent"
-                android:layout_width="384dp"
-                android:layout_height="384dp" />
-
-            <com.romainpiel.shimmer.ShimmerTextView
-                android:id="@+id/tvEquation"
-                android:textSize="28sp"
-                android:typeface="serif"
-                android:textColor="#212121"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:padding="10dp"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-        </LinearLayout>
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fabRecapture"
-            android:src="@drawable/ic_replay"
-            android:layout_gravity="bottom"
-            app:fabSize="auto"
-            android:visibility="gone"
-            android:padding="20dp"
-            android:layout_margin="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    <FrameLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp">
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabCamera"
             android:src="@drawable/camera"
-            android:layout_gravity="bottom|end"
-            app:fabSize="auto"
-            android:padding="20dp"
-            android:layout_margin="20dp"
+            android:layout_gravity="bottom"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvInfo"
+            android:text="Click on the card to retake the image"
+            android:textColor="@color/colorGray"
+            android:layout_gravity="bottom|center"
+            android:visibility="gone"
+            android:padding="10dp"
+            android:layout_margin="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fabSolution"
+            android:src="@drawable/ic_forward"
+            android:layout_gravity="bottom|right"
+            android:padding="10dp"
+            android:layout_margin="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

@@ -23,7 +23,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity"
+            android:windowSoftInputMode="adjustNothing"></activity>
         <activity android:name=".IntroductionActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

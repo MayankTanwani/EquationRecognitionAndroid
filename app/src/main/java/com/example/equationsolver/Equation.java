@@ -1,19 +1,18 @@
 package com.example.equationsolver;
 
 public class Equation {
-    String equation;
-    int result;
+    String imgUri, equation;
 
-    public Equation(String equation, int result) {
+    public Equation(String imgUri, String equation) {
+        this.imgUri = imgUri;
         this.equation = equation;
-        this.result = result;
+    }
+
+    public String getImgUri() {
+        return imgUri;
     }
 
     public String getEquation() {
         return equation;
-    }
-
-    public int getResult() {
-        return result;
     }
 }

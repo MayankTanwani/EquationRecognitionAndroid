@@ -3,6 +3,7 @@ package com.example.equationsolver;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -17,35 +18,37 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class GetEquationTask extends AsyncTask<String, Void, Equation> {
+public class DownloadSolutionTask extends AsyncTask<String, Void, Solution> {
 
-    public interface OnDownloadEquation {
-        void getStringEquation(String equation);
+    Context context;
+    String equationUrl;
+    private ProgressDialog dialog;
+    public static final String TAG = "TASK";
+
+    public interface OnDownloadSolution {
+        void getSolution(Solution result);
     }
 
-    private Context context;
-    private String imgUrl;
-    private ProgressDialog dialog;
-    OnDownloadEquation ode;
+    OnDownloadSolution onDownloadSolution;
 
-    public GetEquationTask(Context context, String imgUrl, OnDownloadEquation ode) {
+    public DownloadSolutionTask(Context context, String equationUrl, OnDownloadSolution onDownloadSolution) {
         this.context = context;
-        this.imgUrl = imgUrl;
-        this.ode = ode;
+        this.equationUrl = equationUrl;
+        this.onDownloadSolution = onDownloadSolution;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         dialog = new ProgressDialog(context);
-        dialog.setMessage("Recognising Equation...");
+        dialog.setMessage("Calculating...");
         dialog.show();
     }
 
     @Override
-    protected Equation doInBackground(String... strings) {
+    protected Solution doInBackground(String... strings) {
         URL url = null;
-        Equation equation = null;
+        Solution solution = null;
         try {
             url = new URL(strings[0]);
         } catch (MalformedURLException e) {
@@ -53,14 +56,15 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
         }
         HttpURLConnection connection;
         try {
-            // Send a POST request
+            // Send the POST request
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Content-Type", "application/json; UTF-8");
+            connection.setRequestProperty("Content-Type", "application/json");
             connection.setDoOutput(true);
             connection.setUseCaches(false);
             connection.setRequestMethod("POST");
             DataOutputStream dataOutputStream = new DataOutputStream(connection.getOutputStream());
-            dataOutputStream.writeBytes(imgUrl);
+            Log.d(TAG, "Task Url: " + equationUrl);
+            dataOutputStream.writeBytes(equationUrl);
             dataOutputStream.flush();
             dataOutputStream.close();
 
@@ -76,23 +80,27 @@ public class GetEquationTask extends AsyncTask<String, Void, Equation> {
             } while (line != null);
 
             JSONObject jsonObject = new JSONObject(builder.toString());
-            equation = new Equation(imgUrl, jsonObject.getString("equation"));
+            solution = new Solution(
+                    jsonObject.getBoolean("success"),
+                    jsonObject.getString("solution"),
+                    jsonObject.getString("graph")
+            );
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return equation;
+        return solution;
     }
 
     @Override
-    protected void onPostExecute(Equation equation) {
-        super.onPostExecute(equation);
-        if(equation != null && !equation.getEquation().equals(null) && ode != null) {
-            ode.getStringEquation(equation.getEquation());
+    protected void onPostExecute(Solution solution) {
+        super.onPostExecute(solution);
+        if(solution != null && solution.isSuccess() && onDownloadSolution != null) {
+            onDownloadSolution.getSolution(solution);
         }
         else {
-            Toast.makeText(context, "Please try again", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Problem occurred while calculating", Toast.LENGTH_SHORT).show();
         }
         dialog.dismiss();
     }
