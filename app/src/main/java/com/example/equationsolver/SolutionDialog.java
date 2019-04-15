@@ -45,8 +45,9 @@ public class SolutionDialog extends AppCompatDialogFragment {
         tvSolution = view.findViewById(R.id.tvSolutionResult);
         ivGraph = view.findViewById(R.id.ivGraph);
         // TODO: Insert the graph image here
-        // Glide.with(context).load(solution.getGraph()).into(ivGraph);
-        // Picasso.get().load(solution.getGraph()).into(ivGraph);
+//         Glide.with(context).load(solution.getGraph()).into(ivGraph);
+//        if(solution.getGraph()!=null)
+//         Picasso.get().load(solution.getGraph()).into(ivGraph);
 
         String[] equations = new String[equationArrayList.size()];
         for(int i = 0 ; i < equationArrayList.size() ; i++) {

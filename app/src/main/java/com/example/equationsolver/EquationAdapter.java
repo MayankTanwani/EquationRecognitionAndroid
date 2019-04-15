@@ -53,6 +53,7 @@ public class EquationAdapter extends RecyclerView.Adapter<EquationAdapter.Equati
         Equation equation = equationArrayList.get(i);
         Glide.with(context).load(equation.getImgUri()).centerCrop().into(equationViewHolder.ivEquationImage);
         equationViewHolder.tvStringEquation.setText(equation.getEquation());
+        equationViewHolder.etEditEquation.setText(equation.getEquation());
         equationViewHolder.rootView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +77,6 @@ public class EquationAdapter extends RecyclerView.Adapter<EquationAdapter.Equati
                 equationArrayList.add(i, new Equation(url, equationString));
                 updateEquations(equationArrayList);
                 equationViewHolder.llEdit.setVisibility(View.GONE);
-                equationViewHolder.etEditEquation.setText("");
             }
         });
     }

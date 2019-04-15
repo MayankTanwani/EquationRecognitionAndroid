@@ -12,7 +12,8 @@ public class SolutionFragment extends Fragment {
 
 
     public SolutionFragment() {
-        // Required empty public constructor
+        // Required empty public co
+        // nstructor
     }
 
 
