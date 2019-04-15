@@ -6,12 +6,16 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -23,11 +27,11 @@ public class SolutionDialog extends AppCompatDialogFragment {
     }
 
     Context context;
-    TextView tvEquations, tvSolution;
+    TextView tvGraphUrl, tvEquations, tvSolution;
     ArrayList<Equation> equationArrayList;
     Solution solution;
-    ImageView ivGraph;
     OnPositiveListener onPositiveListener;
+    public static final String TAG = "DIALOG_SOLUTION";
 
     public void setEquationsAndSolution(Context context, ArrayList<Equation> equationArrayList, Solution solution) {
         this.context = context;
@@ -41,13 +45,16 @@ public class SolutionDialog extends AppCompatDialogFragment {
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_solution, null);
 
+        tvGraphUrl = view.findViewById(R.id.tvGraphUrl);
         tvEquations = view.findViewById(R.id.tvSolutionEquation);
         tvSolution = view.findViewById(R.id.tvSolutionResult);
-        ivGraph = view.findViewById(R.id.ivGraph);
         // TODO: Insert the graph image here
-//         Glide.with(context).load(solution.getGraph()).into(ivGraph);
-//        if(solution.getGraph()!=null)
-//         Picasso.get().load(solution.getGraph()).into(ivGraph);
+        Log.d(TAG, "Graph Url: " + solution.getGraph());
+        tvGraphUrl.setMovementMethod(LinkMovementMethod.getInstance());
+        String url = "<a href='" + solution.getGraph() +"'> Click here to view graph</a>";
+        tvGraphUrl.setText(Html.fromHtml(url));
+        // Glide.with(context).load(graphUrl).into(ivGraph);
+        // Picasso.get().load(solution.getGraph()).into(ivGraph);
 
         String[] equations = new String[equationArrayList.size()];
         for(int i = 0 ; i < equationArrayList.size() ; i++) {

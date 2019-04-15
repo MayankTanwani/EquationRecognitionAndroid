@@ -80,6 +80,16 @@ public class MainActivity extends AppCompatActivity implements SolutionDialog.On
                 launchCamera();
             }
         });
+        equationAdapter.setOnEquationFabClickListener(new EquationAdapter.OnEquationFabClickListener() {
+            @Override
+            public void getReferences(int i, TextView tvToChange, String equation) {
+                Log.d(TAG, "Array List Position: " + i);
+                String url = equationArrayList.get(i).getImgUri();
+                equationArrayList.remove(i);
+                equationArrayList.add(new Equation(url, equation));
+                equationAdapter.updateEquations(equationArrayList);
+            }
+        });
     }
 
     View.OnClickListener cameraListener = new View.OnClickListener() {

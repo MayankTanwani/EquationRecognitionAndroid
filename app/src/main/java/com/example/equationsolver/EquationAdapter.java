@@ -22,9 +22,14 @@ public class EquationAdapter extends RecyclerView.Adapter<EquationAdapter.Equati
         void getPosition(int i);
     }
 
+    public interface OnEquationFabClickListener {
+        void getReferences(int i, TextView tvToChange, String equation);
+    }
+
     Context context;
     ArrayList<Equation> equationArrayList;
     OnEquationClickListener onEquationClickListener;
+    OnEquationFabClickListener onEquationFabClickListener;
 
     public EquationAdapter(Context context, ArrayList<Equation> equationArrayList) {
         this.context = context;
@@ -38,6 +43,10 @@ public class EquationAdapter extends RecyclerView.Adapter<EquationAdapter.Equati
 
     public void setOnEquationClickListener(OnEquationClickListener onEquationClickListener) {
         this.onEquationClickListener = onEquationClickListener;
+    }
+
+    public void setOnEquationFabClickListener(OnEquationFabClickListener onEquationFabClickListener) {
+        this.onEquationFabClickListener = onEquationFabClickListener;
     }
 
     @NonNull
@@ -71,12 +80,10 @@ public class EquationAdapter extends RecyclerView.Adapter<EquationAdapter.Equati
         equationViewHolder.fabEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String equationString = equationViewHolder.etEditEquation.getText().toString();
-                String url = equationArrayList.get(i).getImgUri();
-                equationArrayList.remove(i);
-                equationArrayList.add(i, new Equation(url, equationString));
-                updateEquations(equationArrayList);
-                equationViewHolder.llEdit.setVisibility(View.GONE);
+                if(onEquationFabClickListener != null) {
+                    onEquationFabClickListener.getReferences(i, equationViewHolder.tvStringEquation, equationViewHolder.etEditEquation.getText().toString());
+                    equationViewHolder.llEdit.setVisibility(View.GONE);
+                }
             }
         });
     }

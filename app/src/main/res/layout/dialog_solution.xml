@@ -6,8 +6,18 @@
     android:padding="5dp"
     android:layout_margin="5dp">
 
-    <ImageView
-        android:id="@+id/ivGraph"
+    <!--<ImageView-->
+        <!--android:id="@+id/ivGraph"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="200dp" />-->
+
+    <TextView
+        android:id="@+id/tvGraphUrl"
+        android:textSize="18sp"
+        android:gravity="center"
+        android:textColor="@color/colorGray"
+        android:padding="5dp"
+        android:layout_margin="5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
