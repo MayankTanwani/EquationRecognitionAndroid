@@ -242,7 +242,8 @@ public class MainActivity extends AppCompatActivity implements SolutionDialog.On
                 }
             }
         });
-        task.execute("https://boiling-wildwood-98824.herokuapp.com/predict");
+        // New Equation Recognition API Url
+        task.execute("https://equationrecognitionapi.herokuapp.com/predict");
     }
 
     @Override
