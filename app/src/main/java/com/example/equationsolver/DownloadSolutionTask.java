@@ -80,11 +80,20 @@ public class DownloadSolutionTask extends AsyncTask<String, Void, Solution> {
             } while (line != null);
 
             JSONObject jsonObject = new JSONObject(builder.toString());
-            solution = new Solution(
-                    jsonObject.getBoolean("success"),
-                    jsonObject.getString("solution"),
-                    jsonObject.getString("graph")
-            );
+            if(jsonObject.has("graph")) {
+                solution = new Solution(
+                        jsonObject.getBoolean("success"),
+                        jsonObject.getString("solution"),
+                        jsonObject.getString("graph")
+                );
+            }
+            else {
+                solution = new Solution(
+                        jsonObject.getBoolean("success"),
+                        jsonObject.getString("solution"),
+                        null
+                );
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {

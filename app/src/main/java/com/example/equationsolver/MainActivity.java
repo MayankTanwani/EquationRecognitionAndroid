@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements SolutionDialog.On
                         // Update the record
                         equationArrayList.remove(equationPosition);
                         equationArrayList.add(equationPosition, new Equation(imgUrl, equation));
-                        equationAdapter.notifyDataSetChanged();
+                        equationAdapter.updateEquations(equationArrayList);
                     }
                 }
                 else {
