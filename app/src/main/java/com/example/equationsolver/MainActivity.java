@@ -234,7 +234,7 @@ public class MainActivity extends AppCompatActivity implements SolutionDialog.On
                         // Update the record
                         equationArrayList.remove(equationPosition);
                         equationArrayList.add(equationPosition, new Equation(imgUrl, equation));
-                        equationAdapter.notifyDataSetChanged();
+                        equationAdapter.updateEquations(equationArrayList);
                     }
                 }
                 else {
@@ -242,8 +242,7 @@ public class MainActivity extends AppCompatActivity implements SolutionDialog.On
                 }
             }
         });
-        // New Equation Recognition API Url
-        task.execute("https://equationrecognitionapi.herokuapp.com/predict");
+        task.execute("https://boiling-wildwood-98824.herokuapp.com/predict");
     }
 
     @Override
